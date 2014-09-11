@@ -5,19 +5,19 @@ The problem with “acquisition” and publishTraverse is that the current metho
 returns too many different URLs for the same content. For instance here is
 some potential url for the “kb” page of the plone.org website
 
-https://plone.org/documentation/kb
-https://plone.org/documentation/manual/kb
-https://plone.org/documentation/kb/manual/kb
-https://plone.org/documentation/manual/spinner.gif/kb
-...
+ - https://plone.org/documentation/kb
+ - https://plone.org/documentation/manual/kb
+ - https://plone.org/documentation/kb/manual/kb
+ - https://plone.org/documentation/manual/spinner.gif/kb
+ - ...
 
 and here is a generic "Plone" site with two content items "a" and "b" (folderish or not)
 
-http://example.com/Plone/a
-http://example.com/Plone/a/b/a
-http://example.com/Plone/a
-http://example.com/Plone/b/a
-...
+ - http://example.com/Plone/a
+ - http://example.com/Plone/a/b/a
+ - http://example.com/Plone/a
+ - http://example.com/Plone/b/a
+ - ...
 
 All the urls above returns 200 with the same content, while I would like the
 "canonical url" to return 200 and the other to return 404.
