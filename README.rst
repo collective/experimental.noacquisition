@@ -59,6 +59,14 @@ By default invalid traverse are only logged as warning.
 For enable raising exceptions, you need to manually modify config.py
 changing DRYRUN to False.
 
+Tests
+=====
+
+This add-on is tested using Travis CI. The current status of the add-on is :
+
+.. image:: https://secure.travis-ci.org/collective/experimental.noacquisition.png
+    :target: http://travis-ci.org/collective/experimental.noacquisition
+
 
 Other solutions
 ===============
