@@ -6,9 +6,8 @@ version = '1.0.0'
 setup(name='experimental.noacquisition',
       version=version,
       description="No acquistion during publish traverse",
-      long_description=open("README.md").read(),
-      # long_description=(open("README.rst").read() + "\n" +
-      #                   open("CHANGES.rst").read()),
+      long_description=(open("README.rst").read() + "\n" +
+                        open("CHANGES.rst").read()),
       # Get more strings from
       # http://pypi.python.org/pypi?:action=list_classifiers
       classifiers=[
