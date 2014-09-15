@@ -86,6 +86,6 @@ Warning
 Don't use it, if you don't know exactly what are you doing... at least use
 leaving DRYRUN=True.
 
-This doesn't stop publication without expliciti acquisition with Archetypes
-and all objects using ``__bobo_traverse__'' method.
+This doesn't stop publication without explicit acquisition with Archetypes
+and all objects using ``__bobo_traverse__`` method.
 
