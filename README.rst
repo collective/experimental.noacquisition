@@ -59,7 +59,7 @@ By default invalid traverse are only logged as warning.
 For enable raising exceptions, you need to manually modify config.py
 changing DRYRUN to False. 
 
-Or using plone.recipe.zope2instance, e.g.::
+Or using plone.recipe.zope2instance >= 4.2.14, e.g.::
 
     [instance]
     recipe = plone.recipe.zope2instance
