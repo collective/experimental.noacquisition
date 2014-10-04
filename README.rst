@@ -57,7 +57,17 @@ ZPublisher.BaseRequest.DefaultPublishTraverse.
 By default invalid traverse are only logged as warning.
 
 For enable raising exceptions, you need to manually modify config.py
-changing DRYRUN to False.
+changing DRYRUN to False. 
+
+Or using plone.recipe.zope2instance, e.g.::
+
+    [instance]
+    recipe = plone.recipe.zope2instance
+    ...
+    initialization =
+       from experimental.noacquisition import config
+       config.DRYRUN = False
+
 
 Tests
 =====
