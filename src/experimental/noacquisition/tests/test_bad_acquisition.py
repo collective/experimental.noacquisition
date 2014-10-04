@@ -1,23 +1,34 @@
 # mostly grabbed from
 # https://github.com/plone/Products.CMFPlone/blob/publication-through-explicit-acquisition/Products/CMFPlone/tests/test_bad_acquisition.py
 
+import pkg_resources
 import os.path
 import unittest
 from urllib2 import HTTPError
 from plone.testing.z2 import Browser
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 
+try:
+    pkg_resources.get_distribution('plone.app.contenttypes')
+except pkg_resources.DistributionNotFound:
+    HAS_PACONTENTTYPES = False
+else:
+    HAS_PACONTENTTYPES = True
+
 from experimental.noacquisition.testing import BASE_FUNCTIONAL_TESTING
 from experimental.noacquisition import config
 
 
 def dummy_image():
-    from plone.namedfile.file import NamedBlobImage
     filename = os.path.join(os.path.dirname(__file__), u'image.gif')
-    return NamedBlobImage(
-        data=open(filename, 'r').read(),
-        filename=filename
-    )
+    if HAS_PACONTENTTYPES:
+        from plone.namedfile.file import NamedBlobImage
+        return NamedBlobImage(
+            data=open(filename, 'r').read(),
+            filename=filename
+        )
+    else:
+        return open(filename, 'r').read()
 
 
 class TestBadAcquisition(unittest.TestCase):

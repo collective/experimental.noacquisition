@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="experimental.noacquistion">
+
+  <include package="experimental.noacquisition" />
+  <include package="plone.app.imaging" file="testing.zcml" />
+  <include package="plone.namedfile.tests" file="testing.zcml" />
+
+</configure>

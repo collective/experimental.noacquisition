@@ -77,6 +77,8 @@ currently it doesn't works for all cases, at least when there is a custom
 traversal at the end of the request (take a look at the tests inside this package).
 https://github.com/plone/Products.CMFPlone/tree/publication-through-explicit-acquisition
 
+There is also another package with same approach as CMFPlone's branch:
+https://github.com/collective/collective.excplicitacquisition
 
 Warning
 =======
@@ -86,6 +88,6 @@ Warning
 Don't use it, if you don't know exactly what are you doing... at least use
 leaving DRYRUN=True.
 
-This doesn't stop publication without explicit acquisition with Archetypes
-and all objects using ``__bobo_traverse__`` method.
+This doesn't stop publication without explicit acquisition with
+all objects using explicitly ``__bobo_traverse__`` method.
 
