@@ -78,7 +78,7 @@ traversal at the end of the request (take a look at the tests inside this packag
 https://github.com/plone/Products.CMFPlone/tree/publication-through-explicit-acquisition
 
 There is also another package with same approach as CMFPlone's branch:
-https://github.com/collective/collective.excplicitacquisition
+https://github.com/collective/collective.explicitacquisition
 
 Warning
 =======
