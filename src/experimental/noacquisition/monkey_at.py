@@ -57,7 +57,8 @@ def __bobo_traverse__(self, REQUEST, name):
                     ##
                     ## STOP TRAVERSING WITHOUT EXPLICIT ACQUISITION
                     ##
-                    if (IContentish.providedBy(target) or
+                    if REQUEST.get('ACTUAL_URL') and (
+                            IContentish.providedBy(target) or
                             IPloneSiteRoot.providedBy(target)):
                         logger.warning(
                             'traverse without explicit acquisition '
