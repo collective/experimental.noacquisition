@@ -52,7 +52,8 @@ Usage
 =====
 
 This is a monkey patch for publishTraverse method of Zope2's
-ZPublisher.BaseRequest.DefaultPublishTraverse.
+ZPublisher.BaseRequest.DefaultPublishTraverse and a monkey patch
+for Products.Archetypes.BaseObject.BaseObject.__bobo_traverse__
 
 By default invalid traverse are only logged as warning.
 
@@ -63,11 +64,21 @@ Or using plone.recipe.zope2instance >= 4.2.14, e.g.::
 
     [instance]
     recipe = plone.recipe.zope2instance
+    eggs =
+        experimental.noacquisition
     ...
     initialization =
        from experimental.noacquisition import config
        config.DRYRUN = False
 
+
+Warning
+=======
+
+**USE AT YOUR OWN RISK**
+
+Don't use it, if you don't know exactly what are you doing... at least use
+leaving DRYRUN = True.
 
 Tests
 =====
@@ -89,15 +100,4 @@ https://github.com/plone/Products.CMFPlone/tree/publication-through-explicit-acq
 
 There is also another package with same approach as CMFPlone's branch:
 https://github.com/collective/collective.explicitacquisition
-
-Warning
-=======
-
-**USE AT YOUR OWN RISK**
-
-Don't use it, if you don't know exactly what are you doing... at least use
-leaving DRYRUN=True.
-
-This doesn't stop publication without explicit acquisition with
-all objects using explicitly ``__bobo_traverse__`` method.
 
