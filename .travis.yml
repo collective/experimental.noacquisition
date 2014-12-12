@@ -1,11 +1,11 @@
 language: python
 python: "2.7"
 env:
-- PLONE=4.3
-- PLONE=5.0
+- PLONE=4.3 BOOTSTRAP=bootstrap1.py
+- PLONE=5.0 BOOTSTRAP=bootstrap.py
 install:
 - virtualenv test-env --no-setuptools
 - mkdir -p buildout-cache/downloads
-- test-env/bin/python bootstrap.py -c travis-$PLONE.x.cfg
+- test-env/bin/python $BOOTSTRAP -c travis-$PLONE.x.cfg
 - bin/buildout -N -t 3 -c travis-$PLONE.x.cfg
 script: bin/test
