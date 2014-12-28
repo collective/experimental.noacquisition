@@ -33,7 +33,7 @@ setup(name='experimental.noacquisition',
           'Zope2>=2.13.4,<=2.13.22'  # paranoid
       ],
       extras_require={
-          'test': ['Products.CMFPlone[test]']
+          'test': ['Products.CMFPlone[test]', 'Products.PloneTestCase']
       },
       entry_points="""
       # -*- Entry points: -*-
