@@ -30,7 +30,7 @@ setup(name='experimental.noacquisition',
           'setuptools',
           # -*- Extra requirements: -*-
           'collective.monkeypatcher',
-          'Zope2>=2.13.4,<=2.13.22'  # paranoid
+          'Zope2>=2.13.4,<=2.13.23'  # paranoid
       ],
       extras_require={
           'test': ['Products.CMFPlone[test]', 'Products.PloneTestCase']
