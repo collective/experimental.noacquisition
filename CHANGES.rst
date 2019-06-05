@@ -4,7 +4,8 @@ Changelog
 1.0.0b5 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Zope2 2.13.28 (no changes)
+  [mamico]
 
 
 1.0.0b4 (2018-05-14)
