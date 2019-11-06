@@ -12,11 +12,12 @@
 ##############################################################################
 """ Basic ZPublisher request management.
 
-    + monkeypatch for break traversing without explicit acquisition
++ monkeypatch for break traversing without explicit acquisition
 
 """
 
 import logging
+import pkg_resources
 from Acquisition import aq_base
 from Acquisition.interfaces import IAcquirer
 from Products.CMFCore.interfaces import IContentish
@@ -30,41 +31,48 @@ from zope.interface import Interface
 
 from experimental.noacquisition import config
 
-
 logger = logging.getLogger('experimental.noacquisition')
+
+# PARANOID VERSION CHECK
+if pkg_resources.get_distribution("Zope2").version == '4.0':
+   assert pkg_resources.get_distribution("Zope").version <= '4.1.1'
 
 
 def publishTraverse(self, request, name):
     object = self.context
-    URL=request['URL']
+    URL = request['URL']
 
-    if name[:1]=='_':
-        raise Forbidden("Object name begins with an underscore at: %s" % URL)
+    if name[:1] == '_':
+        raise Forbidden(
+            "Object name begins with an underscore at: %s" % URL)
 
     subobject = UseTraversalDefault  # indicator
     try:
-        if hasattr(object,'__bobo_traverse__'):
+        if hasattr(object, '__bobo_traverse__'):
             try:
-                subobject=object.__bobo_traverse__(request, name)
-                if type(subobject) is type(()) and len(subobject) > 1:
+                subobject = object.__bobo_traverse__(request, name)
+                if isinstance(subobject, tuple) and len(subobject) > 1:
                     # Add additional parents into the path
                     # XXX There are no tests for this:
                     request['PARENTS'][-1:] = list(subobject[:-1])
                     object, subobject = subobject[-2:]
-            except (AttributeError, KeyError, NotFound), e:
+            except (AttributeError, KeyError, NotFound) as e:
                 # Try to find a view
-                subobject = queryMultiAdapter((object, request), Interface, name)
+                subobject = queryMultiAdapter(
+                    (object, request), Interface, name)
                 if subobject is not None:
                     # OFS.Application.__bobo_traverse__ calls
                     # REQUEST.RESPONSE.notFoundError which sets the HTTP
                     # status code to 404
                     request.response.setStatus(200)
                     # We don't need to do the docstring security check
-                    # for views, so lets skip it and return the object here.
+                    # for views, so lets skip it and
+                    # return the object here.
                     if IAcquirer.providedBy(subobject):
                         subobject = subobject.__of__(object)
                     return subobject
-                # No view found. Reraise the error raised by __bobo_traverse__
+                # No view found. Reraise the error
+                # raised by __bobo_traverse__
                 raise e
     except UseTraversalDefault:
         pass
@@ -85,33 +93,31 @@ def publishTraverse(self, request, name):
             # And lastly, of there is no view, try acquired attributes, but
             # only if there is no __bobo_traverse__:
             try:
-                subobject=getattr(object, name)
-                if subobject:
-                    logger.debug(
+                subobject = getattr(object, name)
+                logger.debug(
+                    'traverse without explicit acquisition '
+                    'object=%r name=%r subobject=%r url=%r referer=%r',
+                    object, name, subobject,
+                    request.get('ACTUAL_URL'),
+                    request.get('HTTP_REFERER', '-')
+                )
+                ##
+                ## STOP TRAVERSING WITHOUT EXPLICIT ACQUISITION
+                ##
+                if (IContentish.providedBy(subobject) or
+                        IPloneSiteRoot.providedBy(subobject)):
+                    logger.warning(
                         'traverse without explicit acquisition '
                         'object=%r name=%r subobject=%r url=%r referer=%r',
                         object, name, subobject,
                         request.get('ACTUAL_URL'),
                         request.get('HTTP_REFERER', '-')
                     )
-                    ##
-                    ## STOP TRAVERSING WITHOUT EXPLICIT ACQUISITION
-                    ##
-                    if (IContentish.providedBy(subobject) or
-                            IPloneSiteRoot.providedBy(subobject)):
-                        logger.warning(
-                            'traverse without explicit acquisition '
-                            'object=%r name=%r subobject=%r url=%r referer=%r',
-                            object, name, subobject,
-                            request.get('ACTUAL_URL'),
-                            request.get('HTTP_REFERER', '-')
-                        )
-                        if not config.DRYRUN:
-                            subobject = None
-                            raise AttributeError
-
-                # Again, clear any error status created by __bobo_traverse__
-                # because we actually found something:
+                    if not config.DRYRUN:
+                        subobject = None
+                        raise AttributeError
+                # Again, clear any error status created by
+                # __bobo_traverse__ because we actually found something:
                 request.response.setStatus(200)
             except AttributeError:
                 pass
@@ -120,7 +126,7 @@ def publishTraverse(self, request, name):
             if subobject is None:
                 try:
                     subobject = object[name]
-                except TypeError: # unsubscriptable
+                except TypeError:  # unsubscriptable
                     raise KeyError(name)
 
     # Ensure that the object has a docstring, or that the parent
@@ -129,20 +135,14 @@ def publishTraverse(self, request, name):
     doc = getattr(subobject, '__doc__', None)
     if not doc:
         raise Forbidden(
-            "The object at %s has an empty or missing " \
-            "docstring. Objects must have a docstring to be " \
+            "The object at %s has an empty or missing "
+            "docstring. Objects must have a docstring to be "
             "published." % URL
-            )
+        )
 
-    # Hack for security: in Python 2.2.2, most built-in types
-    # gained docstrings that they didn't have before. That caused
-    # certain mutable types (dicts, lists) to become publishable
-    # when they shouldn't be. The following check makes sure that
-    # the right thing happens in both 2.2.2+ and earlier versions.
-
+    # Check that built-in types aren't publishable.
     if not typeCheck(subobject):
         raise Forbidden(
-            "The object at %s is not publishable." % URL
-            )
+            "The object at %s is not publishable." % URL)
 
     return subobject

@@ -4,7 +4,8 @@ Changelog
 1.0.0b6 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Python3 Plone 5.2
+  [mamico]
 
 
 1.0.0b5 (2019-06-05)
