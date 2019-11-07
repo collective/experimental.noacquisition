@@ -54,9 +54,9 @@ def __bobo_traverse__(self, REQUEST, name):
                         REQUEST.get('ACTUAL_URL'),
                         REQUEST.get('HTTP_REFERER', '-')
                     )
-                    ##
-                    ## STOP TRAVERSING WITHOUT EXPLICIT ACQUISITION
-                    ##
+                    #
+                    # STOP TRAVERSING WITHOUT EXPLICIT ACQUISITION
+                    #
                     if REQUEST.get('ACTUAL_URL') and (
                             IContentish.providedBy(target) or
                             IPloneSiteRoot.providedBy(target)):

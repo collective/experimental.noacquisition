@@ -3,8 +3,8 @@
 
 import pkg_resources
 import os.path
+from six.moves.urllib.error import HTTPError
 import unittest
-from urllib2 import HTTPError
 from plone.testing.z2 import Browser
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 
@@ -24,11 +24,11 @@ def dummy_image():
     if HAS_PACONTENTTYPES:
         from plone.namedfile.file import NamedBlobImage
         return NamedBlobImage(
-            data=open(filename, 'r').read(),
+            data=open(filename, 'rb').read(),
             filename=filename
         )
     else:
-        return open(filename, 'r').read()
+        return open(filename, 'rb').read()
 
 
 class TestBadAcquisition(unittest.TestCase):
@@ -63,7 +63,7 @@ class TestBadAcquisition(unittest.TestCase):
         try:
             url = self.portal.absolute_url() + '/a_folder/a_page'
             self.browser.open(url)
-        except HTTPError, e:
+        except HTTPError as e:
             error = e
         self.assertTrue(
             error is not None,
@@ -78,7 +78,7 @@ class TestBadAcquisition(unittest.TestCase):
             url = self.portal.absolute_url() + \
                 '/a_folder/a_image/@@images/image'
             self.browser.open(url)
-        except HTTPError, e:
+        except HTTPError as e:
             error = e
         self.assertTrue(
             error is not None,
