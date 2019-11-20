@@ -92,6 +92,7 @@ There is a more elegant solution in a branch of Products.CMFPlone, that makes us
 But seems that currently it doesn't works for all cases, at least when there is a custom traversal at the end of the request (take a look at the tests inside this package).
 https://github.com/plone/Products.CMFPlone/tree/publication-through-explicit-acquisition
 
-There is also another package with same approach as CMFPlone's branch:
-`collective.explicitacquisition <https://github.com/collective/collective.explicitacquisition>`_
+There is also other packages with same approach as CMFPlone's branch:
+`collective.explicitacquisition <https://github.com/collective/collective.explicitacquisition>`_ and
+_collective.redirectacquired <https://github.com/collective/collective.redirectacquired/collective/redirectacquired>_
 
