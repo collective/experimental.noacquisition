@@ -94,5 +94,4 @@ https://github.com/plone/Products.CMFPlone/tree/publication-through-explicit-acq
 
 There is also other packages with same approach as CMFPlone's branch:
 `collective.explicitacquisition <https://github.com/collective/collective.explicitacquisition>`_ and
-_collective.redirectacquired <https://github.com/collective/collective.redirectacquired/collective/redirectacquired>_
-
+`collective.redirectacquired <https://github.com/collective/collective.redirectacquiredn>`_
