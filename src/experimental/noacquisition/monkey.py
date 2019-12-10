@@ -35,7 +35,7 @@ logger = logging.getLogger('experimental.noacquisition')
 
 # PARANOID VERSION CHECK
 if pkg_resources.get_distribution("Zope2").version == '4.0':
-    assert pkg_resources.get_distribution("Zope").version <= '4.1.1'
+    assert pkg_resources.get_distribution("Zope").version < '4.2'
 
 
 def publishTraverse(self, request, name):
