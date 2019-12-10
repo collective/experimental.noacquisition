@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.0b7 (unreleased)
+1.0.0b7 (2019-12-10)
 --------------------
 
 - Zope < 4.2 (no changes)
