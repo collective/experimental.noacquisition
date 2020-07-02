@@ -30,7 +30,7 @@ def __bobo_traverse__(self, REQUEST, name):
     method = REQUEST.get('REQUEST_METHOD', 'GET').upper()
     # Logic from "ZPublisher.BaseRequest.BaseRequest.traverse"
     # to check whether this is a browser request
-    if (len(REQUEST.get('TraversalRequestNameStack', ())) == 0 and
+    if (len(REQUEST.get('TraversalRequestNameStack', ())) == 0 and  # NOQA
         not (method in ('GET', 'HEAD', 'POST') and not
              isinstance(RESPONSE, xmlrpc.Response))):
         if shasattr(self, name):
@@ -58,7 +58,7 @@ def __bobo_traverse__(self, REQUEST, name):
                     # STOP TRAVERSING WITHOUT EXPLICIT ACQUISITION
                     #
                     if REQUEST.get('ACTUAL_URL') and (
-                            IContentish.providedBy(target) or
+                            IContentish.providedBy(target) or  # NOQA
                             IPloneSiteRoot.providedBy(target)):
                         logger.warning(
                             'traverse without explicit acquisition '
@@ -73,7 +73,7 @@ def __bobo_traverse__(self, REQUEST, name):
     if target is not None:
         return target
     elif (method not in ('GET', 'POST') and not
-          isinstance(RESPONSE, xmlrpc.Response) and
+          isinstance(RESPONSE, xmlrpc.Response) and  # NOQA
           REQUEST.maybe_webdav_client):
         return NullResource(self, name, REQUEST).__of__(self)
     else:

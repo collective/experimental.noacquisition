@@ -35,7 +35,7 @@ logger = logging.getLogger('experimental.noacquisition')
 
 # PARANOID VERSION CHECK
 if pkg_resources.get_distribution("Zope2").version == '4.0':
-    assert pkg_resources.get_distribution("Zope").version < '4.2'
+    assert pkg_resources.get_distribution("Zope").version < '5'
 
 
 def publishTraverse(self, request, name):
@@ -104,8 +104,7 @@ def publishTraverse(self, request, name):
                 #
                 # STOP TRAVERSING WITHOUT EXPLICIT ACQUISITION
                 #
-                if (IContentish.providedBy(subobject) or
-                        IPloneSiteRoot.providedBy(subobject)):
+                if (IContentish.providedBy(subobject) or IPloneSiteRoot.providedBy(subobject)):
                     logger.warning(
                         'traverse without explicit acquisition '
                         'object=%r name=%r subobject=%r url=%r referer=%r',
