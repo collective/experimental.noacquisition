@@ -4,8 +4,8 @@ Changelog
 1.0.0b8 (unreleased)
 --------------------
 
-- Nothing changed yet.
-
+- Zope < 5 (no changes)
+  [mamico]
 
 1.0.0b7 (2019-12-10)
 --------------------
