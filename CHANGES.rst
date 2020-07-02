@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.0b8 (unreleased)
+1.0.0b8 (2020-07-02)
 --------------------
 
 - Zope < 5 (no changes)
