@@ -3,4 +3,5 @@ include *.rst
 recursive-include docs *
 recursive-include src *
 global-exclude *pyc
+exclude test-*.cfg base.cfg buildout.cfg
 
