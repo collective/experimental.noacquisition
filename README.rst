@@ -1,3 +1,24 @@
+.. This README is meant for consumption by humans and pypi. Pypi can render rst files so please do not use Sphinx features.
+   If you want to learn more about writing documentation, please check out: http://docs.plone.org/about/documentation_styleguide.html
+   This text does not appear on pypi or github. It is a comment.
+
+.. image:: https://img.shields.io/pypi/v/experimental.noacquisition.svg
+    :target: https://pypi.org/project/experimental.noacquisition/
+    :alt: Latest Version
+
+.. image:: https://img.shields.io/pypi/pyversions/experimental.noacquisition.svg?style=plastic
+    :target: https://pypi.org/project/experimental.noacquisition/
+    :alt: Supported - Python Versions
+
+.. image:: https://img.shields.io/pypi/dm/experimental.noacquisition.svg
+    :target: https://pypi.org/project/experimental.noacquisition/
+    :alt: Number of PyPI downloads
+
+.. image:: https://img.shields.io/pypi/l/experimental.noacquisition.svg
+    :target: https://pypi.org/project/experimental.noacquisition/
+    :alt: License
+
+
 Introduction
 ============
 
