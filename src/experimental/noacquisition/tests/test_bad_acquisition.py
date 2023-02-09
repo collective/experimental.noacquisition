@@ -26,7 +26,9 @@ def dummy_image():
     if HAS_PACONTENTTYPES:
         from plone.namedfile.file import NamedBlobImage
 
-        return NamedBlobImage(data=open(filename, "rb").read(), filename=six.text_type(filename))
+        return NamedBlobImage(
+            data=open(filename, "rb").read(), filename=six.text_type(filename)
+        )
     else:
         return open(filename, "rb").read()
 
