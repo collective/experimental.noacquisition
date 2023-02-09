@@ -106,14 +106,6 @@ Warning
 
 Don't use it, if you don't know exactly what are you doing... at least use leaving ``DRYRUN = True``.
 
-Tests
-=====
-
-This add-on is tested using Travis CI. The current status of the add-on is :
-
-.. image:: https://secure.travis-ci.org/collective/experimental.noacquisition.png
-    :target: http://travis-ci.org/collective/experimental.noacquisition
-
 
 Other solutions
 ===============
