@@ -1,12 +1,14 @@
 # mostly grabbed from
 # https://github.com/plone/Products.CMFPlone/blob/publication-through-explicit-acquisition/Products/CMFPlone/tests/test_bad_acquisition.py
 
-import pkg_resources
 import os.path
-from six.moves.urllib.error import HTTPError
 import unittest
-from plone.testing.z2 import Browser
+
+import pkg_resources
+import six
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+from plone.testing.z2 import Browser
+from six.moves.urllib.error import HTTPError
 
 try:
     pkg_resources.get_distribution("plone.app.contenttypes")
@@ -15,8 +17,8 @@ except pkg_resources.DistributionNotFound:
 else:
     HAS_PACONTENTTYPES = True
 
-from experimental.noacquisition.testing import BASE_FUNCTIONAL_TESTING
 from experimental.noacquisition import config
+from experimental.noacquisition.testing import BASE_FUNCTIONAL_TESTING
 
 
 def dummy_image():
@@ -24,7 +26,7 @@ def dummy_image():
     if HAS_PACONTENTTYPES:
         from plone.namedfile.file import NamedBlobImage
 
-        return NamedBlobImage(data=open(filename, "rb").read(), filename=filename)
+        return NamedBlobImage(data=open(filename, "rb").read(), filename=six.text_type(filename))
     else:
         return open(filename, "rb").read()
 
