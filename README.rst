@@ -18,6 +18,15 @@
     :target: https://pypi.org/project/experimental.noacquisition/
     :alt: License
 
+.. image:: https://github.com/collective/experimental.noacquisition/actions/workflows/tests.yml/badge.svg
+    :target: https://github.com/collective/experimental.noacquisition/actions
+    :alt: Tests
+
+.. image:: https://coveralls.io/repos/github/collective/experimental.noacquisition/badge.svg?branch=master
+    :target: https://coveralls.io/github/collective/experimental.noacquisition?branch=master
+    :alt: Coverage
+
+
 
 Introduction
 ============
