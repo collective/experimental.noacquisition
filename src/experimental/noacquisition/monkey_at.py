@@ -9,17 +9,16 @@ from zope.interface import Interface
 from experimental.noacquisition import config
 
 
-logger = logging.getLogger('experimental.noacquisition')
+logger = logging.getLogger("experimental.noacquisition")
 
 
 def __bobo_traverse__(self, REQUEST, name):
-    """Allows transparent access to session subobjects.
-    """
+    """Allows transparent access to session subobjects."""
     # sometimes, the request doesn't have a response, e.g. when
     # PageTemplates traverse through the object path, they pass in
     # a phony request (a dict).
 
-    RESPONSE = getattr(REQUEST, 'RESPONSE', None)
+    RESPONSE = getattr(REQUEST, "RESPONSE", None)
 
     # Is it a registered sub object
     data = self.getSubObject(name, REQUEST, RESPONSE)
@@ -27,12 +26,12 @@ def __bobo_traverse__(self, REQUEST, name):
         return data
     # Or a standard attribute (maybe acquired...)
     target = None
-    method = REQUEST.get('REQUEST_METHOD', 'GET').upper()
+    method = REQUEST.get("REQUEST_METHOD", "GET").upper()
     # Logic from "ZPublisher.BaseRequest.BaseRequest.traverse"
     # to check whether this is a browser request
-    if (len(REQUEST.get('TraversalRequestNameStack', ())) == 0 and  # NOQA
-        not (method in ('GET', 'HEAD', 'POST') and not
-             isinstance(RESPONSE, xmlrpc.Response))):
+    if len(REQUEST.get("TraversalRequestNameStack", ())) == 0 and not (  # NOQA
+        method in ("GET", "HEAD", "POST") and not isinstance(RESPONSE, xmlrpc.Response)
+    ):
         if shasattr(self, name):
             target = getattr(self, name)
     else:
@@ -48,33 +47,40 @@ def __bobo_traverse__(self, REQUEST, name):
                 target = getattr(self, name, None)
                 if target is not None:
                     logger.debug(
-                        'traverse without explicit acquisition '
-                        'object=%r name=%r subobject=%r url=%r referer=%r',
-                        self, name, target,
-                        REQUEST.get('ACTUAL_URL'),
-                        REQUEST.get('HTTP_REFERER', '-')
+                        "traverse without explicit acquisition "
+                        "object=%r name=%r subobject=%r url=%r referer=%r",
+                        self,
+                        name,
+                        target,
+                        REQUEST.get("ACTUAL_URL"),
+                        REQUEST.get("HTTP_REFERER", "-"),
                     )
                     #
                     # STOP TRAVERSING WITHOUT EXPLICIT ACQUISITION
                     #
-                    if REQUEST.get('ACTUAL_URL') and (
-                            IContentish.providedBy(target) or  # NOQA
-                            IPloneSiteRoot.providedBy(target)):
+                    if REQUEST.get("ACTUAL_URL") and (
+                        IContentish.providedBy(target)
+                        or IPloneSiteRoot.providedBy(target)  # NOQA
+                    ):
                         logger.warning(
-                            'traverse without explicit acquisition '
-                            'object=%r name=%r subobject=%r url=%r referer=%r',
-                            self, name, target,
-                            REQUEST.get('ACTUAL_URL'),
-                            REQUEST.get('HTTP_REFERER', '-')
+                            "traverse without explicit acquisition "
+                            "object=%r name=%r subobject=%r url=%r referer=%r",
+                            self,
+                            name,
+                            target,
+                            REQUEST.get("ACTUAL_URL"),
+                            REQUEST.get("HTTP_REFERER", "-"),
                         )
                         if not config.DRYRUN:
                             target = None
 
     if target is not None:
         return target
-    elif (method not in ('GET', 'POST') and not
-          isinstance(RESPONSE, xmlrpc.Response) and  # NOQA
-          REQUEST.maybe_webdav_client):
+    elif (
+        method not in ("GET", "POST")
+        and not isinstance(RESPONSE, xmlrpc.Response)
+        and REQUEST.maybe_webdav_client  # NOQA
+    ):
         return NullResource(self, name, REQUEST).__of__(self)
     else:
         # Raising AttributeError will look up views for us

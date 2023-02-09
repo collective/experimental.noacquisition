@@ -7,14 +7,14 @@ class BaseLayer(ProductsCMFPloneLayer):
         # import plone.app.imaging
         # self.loadZCML(package=plone.app.imaging, name='configure.zcml')
         import experimental.noacquisition
+
         # self.loadZCML(package=experimental.noacquisition, name='configure.zcml')
-        self.loadZCML(package=experimental.noacquisition, name='testing.zcml')
+        self.loadZCML(package=experimental.noacquisition, name="testing.zcml")
 
 
 BASE = BaseLayer()
 
 
 BASE_FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(BASE, ),
-    name="experimental.noacquisiton:Functional"
+    bases=(BASE,), name="experimental.noacquisiton:Functional"
 )
