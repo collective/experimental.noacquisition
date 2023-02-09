@@ -1,0 +1,9 @@
+[run]
+relative_files = True
+
+[report]
+include =
+    */src/experimental/*
+omit =
+    */test*
+    */upgrades/*
