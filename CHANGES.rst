@@ -4,8 +4,8 @@ Changelog
 1.0.0b10 (unreleased)
 ---------------------
 
-- Nothing changed yet.
-
+- Zope < 6 (no changes)
+  [daniele-andreotti]
 
 1.0.0b9 (2020-07-02)
 --------------------
