@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.0b10 (unreleased)
+1.0.0b10 (2023-02-09)
 ---------------------
 
 - Zope < 6 (no changes)
