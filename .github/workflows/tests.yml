@@ -41,6 +41,8 @@ jobs:
         pip install tox
     - name: Test
       run: tox -e ${{ matrix.config[1] }}
+    - name: Workaround (https://github.com/actions/runner-images/issues/6775)
+      run: git config --global --add safe.directory '*'
     - name: Coveralls
       uses: AndreMiras/coveralls-python-action@v20201129
       with:
@@ -51,6 +53,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - name: Workaround (https://github.com/actions/runner-images/issues/6775)
+      run: git config --global --add safe.directory '*'
     - name: Coveralls Finished
       uses: AndreMiras/coveralls-python-action@v20201129
       with:
