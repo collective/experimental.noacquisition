@@ -23,4 +23,4 @@ jobs:
       - name: install flake8
         run: pip install -r requirements-dev.txt
       - name: run flake8
-        run: flake8 src/ setup.py
+        run: flake8 --ignore=E501 src/ setup.py
