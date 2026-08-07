@@ -14,6 +14,15 @@ Changelog
   ``@zpublish`` marker, which the previous docstring-only check did not.
   [mamico]
 
+- CI: pin ``zc.buildout = 3.1.0`` for Plone 5.2 (``test-5.2.x.cfg``).
+  Plone 5.2's own pin, 3.0.1, has a race-condition bug in
+  ``_move_to_eggs_dir_and_compile()`` that raises a bare
+  ``AssertionError`` instead of the real error (fixed in 3.1.0, see
+  `buildout/buildout#307 <https://github.com/buildout/buildout/issues/307>`_).
+  Stayed below 4.0, which requires Python >= 3.9 and would break
+  py27/py36/py37/py38.
+  [mamico]
+
 - CI: add Plone 6.1 and 6.2 to the test matrix (py310-py313), bootstrapping
   each from its own official ``https://dist.plone.org/release/<x>/requirements.txt``.
   Comment out ``py27-plone52``, ``py37-plone52`` and ``py38-plone60`` (all
