@@ -83,25 +83,23 @@ Versions
 Series       Plone               Implementation
 ============ =================== ==============================================
 ``2.x``      6.0, 6.1, 6.2       ``Products.CMFCore.explicitacquisition``
-``1.x``      5.2, 6.0            monkey patch (**this branch**)
+``1.x``      5.2, 6.0, 6.1, 6.2  monkey patch (**this branch**)
 ============ =================== ==============================================
 
-This is the ``1.x`` series, maintained for Plone 5.2 and 6.0. It **cannot** be
-used on Plone 6.2: the monkey patch asserts ``Zope < 6`` and so cannot even be
-imported under Zope 6. Use ``2.x`` there.
-
-Since ``Products.CMFCore`` 3.1 (i.e. Plone 6) Plone ships a native
-implementation of this same idea, based on the ``IPubAfterTraversal`` event
-instead of a monkey patch, and ``2.x`` builds on it. That implementation only
-inspects the *last* traversed object, so it misses acquired content reached
-**through** a view that consumes further path segments -- for instance::
+This is the ``1.x`` series, maintained for Plone 5.2, 6.0, 6.1 and 6.2 (Zope
+< 6.2). Since ``Products.CMFCore`` 3.1 (i.e. Plone 6) Plone also ships a
+native implementation of this same idea, based on the ``IPubAfterTraversal``
+event instead of a monkey patch, and the ``2.x`` series of this package
+builds on that instead. That implementation only inspects the *last*
+traversed object, so it misses acquired content reached **through** a view
+that consumes further path segments -- for instance::
 
     /folder/acquired_image/@@images/image          served by 2.x, 404 with 1.x
     /folder/acquired_doc/@types/Document           served by 2.x, 404 with 1.x
 
 The monkey patch used here does not have that gap, because it checks at
-*every* traversal step. So on Plone 5.2 and 6.0, where it still works,
-``1.x`` gives more complete coverage than ``2.x``.
+*every* traversal step. So ``1.x`` gives more complete coverage than
+``2.x`` on every Plone version both support.
 
 Usage
 =====
