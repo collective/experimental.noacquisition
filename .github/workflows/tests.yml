@@ -13,8 +13,11 @@ jobs:
       matrix:
         config:
         # [Python version, tox env]
-        - ["2.7",  "py27-plone52"]
-        - ["3.7",  "py37-plone52"]
+        # py27 and py37 are commented out: actions/setup-python can no
+        # longer install them on the ubuntu-24.04 runner image (both are
+        # EOL and unavailable/unsupported there).
+        # - ["2.7",  "py27-plone52"]
+        # - ["3.7",  "py37-plone52"]
         - ["3.8",  "py38-plone52"]
         - ["3.8",  "py38-plone60"]
         - ["3.9",  "py39-plone60"]
