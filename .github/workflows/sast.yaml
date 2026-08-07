@@ -1,4 +1,4 @@
-name: Flake8
+name: SAST
 on: [push]
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - name: install flake8
+      - name: install ruff
         run: pip install -r requirements-dev.txt
-      - name: run flake8
-        run: flake8 --ignore=E501,W503 src/ setup.py
+      - name: run ruff (bandit-equivalent security rules)
+        run: ruff check --select S src/

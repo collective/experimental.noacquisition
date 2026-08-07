@@ -76,12 +76,61 @@ The behaviour described above constitute a problem because:
   ``collective.siteisolation`` and probably ``collective.lineage`` do something to isolate subsite, 
   but IMHO again are only workarounds.
 
+Versions
+========
+
+============ =================== ==============================================
+Series       Plone               Implementation
+============ =================== ==============================================
+``2.x``      6.0, 6.1, 6.2       ``Products.CMFCore.explicitacquisition``
+``1.x``      5.2, 6.0            monkey patch (maintained on the ``1.x`` branch)
+============ =================== ==============================================
+
+``2.x`` is **required** on Plone 6.2: the ``1.x`` monkey patch cannot even be
+imported under Zope 6, since it asserts ``Zope < 6``.
+
+``1.x`` is still worth using on Plone 5.2 and 6.0, because it catches one case
+that ``2.x`` does not -- see `Known limitation`_ below.
+
 Usage
 =====
 
-This is a monkey patch for publishTraverse method of Zope2's
-``ZPublisher.BaseRequest.DefaultPublishTraverse`` and a monkey patch
-for ``Products.Archetypes.BaseObject.BaseObject.__bobo_traverse__``
+``Products.CMFCore`` >= 3.1 (i.e. Plone 6) ships a native implementation of
+this same idea, based on the ``IPubAfterTraversal`` event instead of monkey
+patching the publisher: see
+`explicitacquisition.py <https://github.com/zopefoundation/Products.CMFCore/blob/master/src/Products/CMFCore/explicitacquisition.py>`_.
+This package builds on it:
+
+* ``Products.CMFCore.explicitacquisition`` is force-enabled, since Plone < 7
+  disables it by default (see
+  `Products.CMFPlone #3781 <https://github.com/plone/Products.CMFPlone/pull/3781>`_);
+* an adapter for ``IShouldAllowAcquiredItemPublication`` is registered in
+  place of CMFCore's default one, adding ``config.DRYRUN`` and logging.
+
+Known limitation
+----------------
+
+``Products.CMFCore.explicitacquisition`` only inspects the *last* traversed
+object (``PARENTS[0]``). When traversal continues **through** a view that
+consumes further path segments, that view -- not the acquired content --
+ends up being the object inspected, so the acquired content goes unnoticed
+and is served.
+
+Confirmed cases::
+
+    /folder/acquired_image/@@images/image          served (should be 404)
+    /folder/acquired_doc/@types/Document           served (should be 404)
+    /folder/acquired_doc/@vocabularies/<name>      served (should be 404)
+
+Plain URLs, plain views (``/edit``, ``@@edit``) and plain ``plone.restapi``
+services (``@breadcrumbs``, ``@navigation``, ...) *are* correctly blocked.
+
+This is a limitation of the upstream implementation, not something this
+package can work around; ``test_not_found_when_acquired_image_traverser`` is
+marked as an expected failure for this reason. The ``1.x`` monkey patch does
+not have this gap, because it checks at *every* traversal step instead of
+only at the end -- so on Plone 5.2 and 6.0, where ``1.x`` still works,
+staying on ``1.x`` gives full coverage.
 
 By default invalid traverse is only logged as warning.
 
@@ -110,10 +159,12 @@ Don't use it, if you don't know exactly what are you doing... at least use leavi
 Other solutions
 ===============
 
-There is a more elegant solution in a branch of Products.CMFPlone, that makes use of IPubAfterTraversal event instead of a monkey patch. 
-But seems that currently it doesn't works for all cases, at least when there is a custom traversal at the end of the request (take a look at the tests inside this package).
-https://github.com/plone/Products.CMFPlone/tree/publication-through-explicit-acquisition
+The ``Products.CMFPlone`` branch that used to be linked here, based on the
+``IPubAfterTraversal`` event instead of a monkey patch, eventually got
+merged into ``Products.CMFCore`` itself (3.1+) as
+``Products.CMFCore.explicitacquisition``. Since 2.0 this package builds on
+it directly, see `Usage`_ above.
 
-There is also other packages with same approach as CMFPlone's branch:
+There is also other packages with a similar, event based, approach:
 `collective.explicitacquisition <https://github.com/collective/collective.explicitacquisition>`_ and
 `collective.redirectacquired <https://github.com/collective/collective.redirectacquired>`_
