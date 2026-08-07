@@ -9,25 +9,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      # Don't hide the other legs when one fails.
+      fail-fast: false
       matrix:
         config:
         # [Python version, tox env]
-        # py27 and py37 are commented out: actions/setup-python can no
-        # longer install them on the ubuntu-24.04 runner image (both are
-        # EOL and unavailable/unsupported there).
-        # - ["2.7",  "py27-plone52"]
-        # - ["3.7",  "py37-plone52"]
-        - ["3.8",  "py38-plone52"]
-        # py38-plone60 is commented out: Plone 6.0's current constraints
-        # pin plone.recipe.zope2instance >= 8.0.0, which requires
-        # Python >= 3.9. Still in tox.ini for local use with older pins.
-        # - ["3.8",  "py38-plone60"]
-        # py39 is EOL (October 2025); commented out here, still in
-        # tox.ini for local use.
-        # - ["3.9",  "py39-plone60"]
         - ["3.10",  "py310-plone60"]
         - ["3.11",  "py311-plone60"]
+        - ["3.12",  "py312-plone60"]
+        - ["3.13",  "py313-plone60"]
         - ["3.10",  "py310-plone61"]
         - ["3.11",  "py311-plone61"]
         - ["3.12",  "py312-plone61"]

@@ -1,13 +1,11 @@
-"""Adapter used when Products.CMFCore.explicitacquisition is available
-(Products.CMFCore >= 3.1), to plug our config.DRYRUN/logging behaviour
-into the native, event based, implementation.
+"""Adapter plugging our config.DRYRUN/logging behaviour into
+Products.CMFCore.explicitacquisition, the native implementation of
+publication through explicit acquisition.
 
 See https://github.com/zopefoundation/Products.CMFCore/blob/master/src/Products/CMFCore/explicitacquisition.py
 
-Note: the Plone site root doesn't need a dedicated adapter here, unlike
-the legacy monkey patch: on any Plone new enough to ship
-Products.CMFCore >= 3.1, the site root is a Dexterity content object and
-already provides IContentish, so it's covered by ``content_allowed``.
+Note: the Plone site root needs no dedicated adapter here, it is a
+Dexterity content object and already provides IContentish.
 """
 
 import logging
@@ -24,8 +22,7 @@ logger = logging.getLogger("experimental.noacquisition")
 @adapter(IContentish)
 def content_allowed(context):
     """Overrides Products.CMFCore.explicitacquisition.content_allowed:
-    same logic, but honours ``config.DRYRUN`` and logs like the legacy
-    monkey patch used to.
+    same logic, but honours ``config.DRYRUN`` and logs.
     """
     if IPublishableThroughAcquisition.providedBy(context):
         return True

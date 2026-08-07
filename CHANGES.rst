@@ -1,25 +1,39 @@
 Changelog
 =========
 
-1.0.0b11 (unreleased)
----------------------
+2.0.0b1 (unreleased)
+--------------------
 
-- Use ``Products.CMFCore.explicitacquisition`` (Products.CMFCore >= 3.1)
-  when available, instead of monkey patching the publisher. Falls back to
-  the previous monkey patches on older Zope/CMFCore. Known limitation:
-  unlike the monkey patch, the native implementation only catches acquired
-  content when the URL resolves directly to it, not when it's reached
-  through a view (e.g. an image scale); see README.
+- Drop the monkey patches and build on ``Products.CMFCore.explicitacquisition``
+  (Products.CMFCore >= 3.1) instead. ``config.DRYRUN`` and logging are kept,
+  through an ``IShouldAllowAcquiredItemPublication`` adapter overriding
+  CMFCore's own.
   [mamico]
 
-- Add Plone 6.1 and 6.2 to the test matrix, using each release's own
-  bootstrap requirements from https://dist.plone.org/release/ (needed on
-  Python >= 3.12, where the pip/setuptools pinned for Plone 6.0 crash).
+  **Upgrade note:** the native implementation only inspects the last traversed
+  object, so acquired content reached *through* a sub-traversing view is no
+  longer blocked (``/folder/acquired_image/@@images/image``, restapi services
+  taking a subpath). Plain URLs, plain views and plain restapi services are
+  still blocked. On Plone 5.2 and 6.0 the ``1.x`` series is still maintained
+  and does not have this gap; see README.
+
+- Support Plone 6.0, 6.1 and 6.2 (Python 3.10 - 3.13); drop Plone <= 5.2 and
+  Archetypes support, together with the ``collective.monkeypatcher``
+  dependency. Plone 5.2 stays on the ``1.x`` branch.
   [mamico]
 
-- Install ``coverage`` via pip in tox instead of through buildout: the
-  buildout egg falls back to the pure-python tracer and is much slower
-  on CI.
+- Fix Plone 6.2 support: the monkey patch could not even be imported under
+  Zope 6 (its ``assert Zope < 6`` fails), so 1.x is unusable there.
+  [mamico]
+
+- Depend on ``Products.CMFCore >= 3.1`` instead of ``Zope2``, a distribution
+  that no longer exists on Plone 6.1+.
+  [mamico]
+
+- Use each Plone release's own bootstrap requirements from
+  https://dist.plone.org/release/ , and install ``coverage`` via pip in tox
+  instead of through buildout (the buildout egg falls back to the
+  pure-python tracer and is much slower on CI).
   [mamico]
 
 
