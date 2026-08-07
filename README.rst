@@ -98,6 +98,20 @@ patching anything:
   object and already provides ``IContentish``, so it's covered without
   any extra adapter.
 
+Known limitation of the native path
+------------------------------------
+
+``Products.CMFCore.explicitacquisition`` only looks at the *final*
+traversed object (``PARENTS[0]`` after traversal). When the URL ends on a
+view rather than on the content itself -- e.g. an acquired image reached
+through its ``@@images`` scaling view -- that final object is the view,
+not the acquired content, so the check never sees it and the traversal is
+allowed through. The legacy monkey patch below doesn't have this problem,
+since it checks at every traversal step instead of only at the end. This
+is a limitation of the upstream implementation, not something this
+package can work around; ``test_not_found_when_acquired_image_traverser``
+is skipped when the native path is active for this reason.
+
 On older ``Products.CMFCore`` (< 3.1, e.g. Plone <= 5.2), this package falls
 back to its own monkey patch for the ``publishTraverse`` method of Zope2's
 ``ZPublisher.BaseRequest.DefaultPublishTraverse`` and a monkey patch

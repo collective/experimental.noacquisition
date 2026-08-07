@@ -6,7 +6,10 @@ Changelog
 
 - Use ``Products.CMFCore.explicitacquisition`` (Products.CMFCore >= 3.1)
   when available, instead of monkey patching the publisher. Falls back to
-  the previous monkey patches on older Zope/CMFCore.
+  the previous monkey patches on older Zope/CMFCore. Known limitation:
+  unlike the monkey patch, the native implementation only catches acquired
+  content when the URL resolves directly to it, not when it's reached
+  through a view (e.g. an image scale); see README.
   [mamico]
 
 - Add Plone 6.1 and 6.2 to the test matrix, using each release's own

@@ -62,12 +62,21 @@ class TestNativeContentAllowed(unittest.TestCase):
 @unittest.skipUnless(
     HAS_NATIVE, "Products.CMFCore.explicitacquisition is not available"
 )
-class TestInitializeForcesNativeSupport(unittest.TestCase):
-    def test_initialize_enables_native_explicit_acquisition(self):
+class TestPackageImportForcesNativeSupport(unittest.TestCase):
+    """Importing experimental.noacquisition must force
+    Products.CMFCore.explicitacquisition on, even if Plone < 7 (or
+    anything else) already disabled it. This has to happen at module
+    import time, not in ``initialize()``: Zope may never call that for
+    a five:registerPackage-only package (confirmed: it doesn't, at
+    least under plone.app.testing).
+    """
+
+    def test_importing_the_package_enables_native_explicit_acquisition(self):
+        import importlib
         import os
 
+        import experimental.noacquisition
         from Products.CMFCore import explicitacquisition
-        from experimental.noacquisition import initialize
 
         previous_skip_pta = explicitacquisition.SKIP_PTA
         previous_env = os.environ.get(explicitacquisition.PTA_ENV_KEY)
@@ -75,7 +84,7 @@ class TestInitializeForcesNativeSupport(unittest.TestCase):
             explicitacquisition.SKIP_PTA = True
             os.environ[explicitacquisition.PTA_ENV_KEY] = "false"
 
-            initialize(None)
+            importlib.reload(experimental.noacquisition)
 
             self.assertFalse(explicitacquisition.SKIP_PTA)
             self.assertEqual(os.environ[explicitacquisition.PTA_ENV_KEY], "true")

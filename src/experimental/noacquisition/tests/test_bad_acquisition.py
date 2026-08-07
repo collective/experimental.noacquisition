@@ -17,6 +17,13 @@ except pkg_resources.DistributionNotFound:
 else:
     HAS_PACONTENTTYPES = True
 
+try:
+    import Products.CMFCore.explicitacquisition  # noqa
+except ImportError:
+    HAS_NATIVE = False
+else:
+    HAS_NATIVE = True
+
 from experimental.noacquisition import config
 from experimental.noacquisition.testing import BASE_FUNCTIONAL_TESTING
 
@@ -76,6 +83,15 @@ class TestBadAcquisition(unittest.TestCase):
         )
         self.assertEqual(404, error.code)
 
+    @unittest.skipIf(
+        HAS_NATIVE,
+        "Products.CMFCore.explicitacquisition only looks at the final "
+        "traversed object (PARENTS[0]); when that's a view (like the "
+        "image scaling view here) rather than the content itself, an "
+        "acquired ancestor further up PARENTS goes undetected. The "
+        "legacy monkey patch catches this because it checks at every "
+        "traversal step instead.",
+    )
     def test_not_found_when_acquired_image_traverser(self):
         url = self.portal.a_image.absolute_url() + "/@@images/image"
         self.browser.open(url)
