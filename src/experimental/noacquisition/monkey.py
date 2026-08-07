@@ -10,7 +10,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-""" Basic ZPublisher request management.
+"""Basic ZPublisher request management.
 
 + monkeypatch for break traversing without explicit acquisition
 
@@ -33,9 +33,20 @@ from experimental.noacquisition import config
 
 logger = logging.getLogger("experimental.noacquisition")
 
-# PARANOID VERSION CHECK
-if pkg_resources.get_distribution("Zope2").version == "4.0":
-    assert pkg_resources.get_distribution("Zope").version < "6"  # nosec
+# PARANOID VERSION CHECK: publishTraverse() below is a modified copy of
+# ZPublisher.BaseRequest.DefaultPublishTraverse.publishTraverse. Bail out
+# rather than risk silently diverging from upstream's behaviour on a Zope
+# version we haven't checked this copy against. Verified up to Zope 6.1
+# (Plone 6.2): its publishTraverse is unchanged since at least Zope 5.13.
+_ZOPE_VERSION = pkg_resources.parse_version(
+    pkg_resources.get_distribution("Zope").version
+)
+assert _ZOPE_VERSION < pkg_resources.parse_version("6.2"), (  # noqa: S101
+    "experimental.noacquisition's monkey patch has only been verified up "
+    "to Zope 6.1 (Plone 6.2). Consider the 2.x series of this package "
+    "instead, which builds on Products.CMFCore.explicitacquisition rather "
+    "than patching the publisher."
+)
 
 
 def publishTraverse(self, request, name):
@@ -131,19 +142,27 @@ def publishTraverse(self, request, name):
                 except TypeError:  # unsubscriptable
                     raise KeyError(name)
 
-    # Ensure that the object has a docstring, or that the parent
-    # object has a pseudo-docstring for the object. Objects that
-    # have an empty or missing docstring are not published.
-    doc = getattr(subobject, "__doc__", None)
-    if not doc:
-        raise Forbidden(
-            "The object at %s has an empty or missing "
-            "docstring. Objects must have a docstring to be "
-            "published." % URL
-        )
+    if hasattr(request, "ensure_publishable"):
+        # Zope >= 5.10: this also understands the newer @zpublish marker,
+        # not just docstring-based publication control.
+        request.ensure_publishable(subobject)
+    else:
+        # Older Zope (e.g. the Zope 4.x that ships with Plone 5.2): fall
+        # back to the check request.ensure_publishable() replaced.
 
-    # Check that built-in types aren't publishable.
-    if not typeCheck(subobject):
-        raise Forbidden("The object at %s is not publishable." % URL)
+        # Check that built-in types aren't publishable.
+        if not typeCheck(subobject):
+            raise Forbidden("The object at %s is not publishable." % URL)
+
+        # Ensure that the object has a docstring, or that the parent
+        # object has a pseudo-docstring for the object. Objects that
+        # have an empty or missing docstring are not published.
+        doc = getattr(subobject, "__doc__", None)
+        if not doc:
+            raise Forbidden(
+                "The object at %s has an empty or missing "
+                "docstring. Objects must have a docstring to be "
+                "published." % URL
+            )
 
     return subobject
