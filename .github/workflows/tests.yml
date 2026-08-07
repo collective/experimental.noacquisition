@@ -19,8 +19,13 @@ jobs:
         # - ["2.7",  "py27-plone52"]
         # - ["3.7",  "py37-plone52"]
         - ["3.8",  "py38-plone52"]
-        - ["3.8",  "py38-plone60"]
-        - ["3.9",  "py39-plone60"]
+        # py38-plone60 is commented out: Plone 6.0's current constraints
+        # pin plone.recipe.zope2instance >= 8.0.0, which requires
+        # Python >= 3.9. Still in tox.ini for local use with older pins.
+        # - ["3.8",  "py38-plone60"]
+        # py39 is EOL (October 2025); commented out here, still in
+        # tox.ini for local use.
+        # - ["3.9",  "py39-plone60"]
         - ["3.10",  "py310-plone60"]
         - ["3.11",  "py311-plone60"]
         - ["3.10",  "py310-plone61"]
