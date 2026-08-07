@@ -4,7 +4,26 @@ Changelog
 1.0.0b11 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Support Plone 6.2 (Zope 6.1): raise the paranoid version check from
+  ``Zope < 6`` to ``Zope < 6.2`` (verified that
+  ``DefaultPublishTraverse.publishTraverse`` is unchanged between Zope 5.13
+  and 6.1), and delegate the final publishability check to
+  ``request.ensure_publishable()`` when available (Zope >= 5.10), falling
+  back to the old docstring/typeCheck logic on older Zope (e.g. Plone 5.2's
+  Zope 4.x). ``ensure_publishable`` also understands the newer
+  ``@zpublish`` marker, which the previous docstring-only check did not.
+  [mamico]
+
+- CI: comment out ``py27-plone52`` and ``py37-plone52`` (both still work
+  with tox locally): ``actions/setup-python`` can no longer install Python
+  2.7 or 3.7 on the ubuntu-24.04 runner image. Also set ``fail-fast: false``
+  so one broken leg stops hiding the others.
+  [mamico]
+
+- Replace the Bandit security check (broken: its Docker image is based on
+  an archived Debian Buster) with ``ruff --select S``, the equivalent
+  ruleset. Renamed ``bandit.yml`` to ``sast.yaml``.
+  [mamico]
 
 
 1.0.0b10 (2023-02-09)
