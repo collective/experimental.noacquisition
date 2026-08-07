@@ -4,7 +4,18 @@ Changelog
 1.0.0b11 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Use ``Products.CMFCore.explicitacquisition`` (Products.CMFCore >= 3.1)
+  when available, instead of monkey patching the publisher. Falls back to
+  the previous monkey patches on older Zope/CMFCore.
+  [mamico]
+
+- Add Plone 6.1 and 6.2 to the test matrix.
+  [mamico]
+
+- Install ``coverage`` via pip in tox instead of through buildout: the
+  buildout egg falls back to the pure-python tracer and is much slower
+  on CI.
+  [mamico]
 
 
 1.0.0b10 (2023-02-09)

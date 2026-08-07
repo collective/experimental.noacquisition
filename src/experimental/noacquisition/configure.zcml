@@ -11,20 +11,42 @@
   <!-- -*- extra stuff goes here -*- -->
   <include package="collective.monkeypatcher" />
 
-  <monkey:patch
-        description=">Publisher patch for publication through explicit acquisition"
-        class="ZPublisher.BaseRequest.DefaultPublishTraverse"
-        original="publishTraverse"
-        replacement=".monkey.publishTraverse"
+  <!--
+    Products.CMFCore >= 3.1 ships a native implementation of "explicit
+    acquisition" (Products.CMFCore.explicitacquisition), based on the
+    IPubAfterTraversal event instead of monkey patching the publisher.
+    When it's available we rely on it (see native.py) and skip our own
+    monkey patches entirely.
+  -->
+  <configure zcml:condition="not-installed Products.CMFCore.explicitacquisition">
+
+    <monkey:patch
+          description=">Publisher patch for publication through explicit acquisition"
+          class="ZPublisher.BaseRequest.DefaultPublishTraverse"
+          original="publishTraverse"
+          replacement=".monkey.publishTraverse"
+          />
+
+    <configure zcml:condition="installed Products.Archetypes">
+      <monkey:patch
+            description=">Publisher patch for publication through explicit acquisition (AT)"
+            class="Products.Archetypes.BaseObject.BaseObject"
+            original="__bobo_traverse__"
+            replacement=".monkey_at.__bobo_traverse__"
+            />
+    </configure>
+
+  </configure>
+
+  <configure zcml:condition="installed Products.CMFCore.explicitacquisition">
+
+    <!-- Override CMFCore's own adapter so we keep our config.DRYRUN/logging
+         behaviour. -->
+    <adapter
+        provides="Products.CMFCore.interfaces.IShouldAllowAcquiredItemPublication"
+        factory=".native.content_allowed"
         />
 
-  <configure zcml:condition="installed Products.Archetypes">
-    <monkey:patch
-          description=">Publisher patch for publication through explicit acquisition (AT)"
-          class="Products.Archetypes.BaseObject.BaseObject"
-          original="__bobo_traverse__"
-          replacement=".monkey_at.__bobo_traverse__"
-          />
   </configure>
 
 </configure>

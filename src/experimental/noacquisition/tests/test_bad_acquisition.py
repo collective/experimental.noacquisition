@@ -124,6 +124,15 @@ class TestBadAcquisition(unittest.TestCase):
     #         "/VirtualHostRoot/a_page"
     #     self.browser.open(url)
 
+    def test_dryrun_allows_acquired_content(self):
+        # With config.DRYRUN = True, invalid traversal is only logged,
+        # never blocked: this must hold whether the legacy monkey patches
+        # or the native Products.CMFCore.explicitacquisition are in use.
+        config.DRYRUN = True
+        url = self.portal.absolute_url() + "/a_folder/a_page"
+        self.browser.open(url)
+        self.assertIn("a_page", self.browser.contents)
+
     def test_traverse_portal_skin_object(self):
         url = self.portal.absolute_url() + "/logo.png"
         self.browser.open(url)

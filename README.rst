@@ -79,9 +79,29 @@ The behaviour described above constitute a problem because:
 Usage
 =====
 
-This is a monkey patch for publishTraverse method of Zope2's
+``Products.CMFCore`` >= 3.1 (bundled since around Plone 6.0) ships a native
+implementation of this same idea, based on the ``IPubAfterTraversal`` event
+instead of monkey patching the publisher: see
+`explicitacquisition.py <https://github.com/zopefoundation/Products.CMFCore/blob/master/src/Products/CMFCore/explicitacquisition.py>`_.
+
+When that module is importable, this package uses it instead of monkey
+patching anything:
+
+* the two monkey patches described below are not applied at all;
+* ``Products.CMFCore.explicitacquisition`` is force-enabled, even on
+  Plone < 7, which disables it by default (see
+  `Products.CMFPlone #3781 <https://github.com/plone/Products.CMFPlone/pull/3781>`_);
+* our own adapter for ``IShouldAllowAcquiredItemPublication`` is registered
+  in place of CMFCore's default one, so that ``config.DRYRUN`` and logging
+  keep working exactly as before. On any Plone new enough to ship
+  Products.CMFCore >= 3.1, the Plone site root is a Dexterity content
+  object and already provides ``IContentish``, so it's covered without
+  any extra adapter.
+
+On older ``Products.CMFCore`` (< 3.1, e.g. Plone <= 5.2), this package falls
+back to its own monkey patch for the ``publishTraverse`` method of Zope2's
 ``ZPublisher.BaseRequest.DefaultPublishTraverse`` and a monkey patch
-for ``Products.Archetypes.BaseObject.BaseObject.__bobo_traverse__``
+for ``Products.Archetypes.BaseObject.BaseObject.__bobo_traverse__``.
 
 By default invalid traverse is only logged as warning.
 
@@ -110,10 +130,12 @@ Don't use it, if you don't know exactly what are you doing... at least use leavi
 Other solutions
 ===============
 
-There is a more elegant solution in a branch of Products.CMFPlone, that makes use of IPubAfterTraversal event instead of a monkey patch. 
-But seems that currently it doesn't works for all cases, at least when there is a custom traversal at the end of the request (take a look at the tests inside this package).
-https://github.com/plone/Products.CMFPlone/tree/publication-through-explicit-acquisition
+The ``Products.CMFPlone`` branch that used to be linked here, based on the
+``IPubAfterTraversal`` event instead of a monkey patch, eventually got
+merged into ``Products.CMFCore`` itself (3.1+) as
+``Products.CMFCore.explicitacquisition``. This package now uses it directly
+when available, see `Usage`_ above.
 
-There is also other packages with same approach as CMFPlone's branch:
+There is also other packages with a similar, event based, approach:
 `collective.explicitacquisition <https://github.com/collective/collective.explicitacquisition>`_ and
 `collective.redirectacquired <https://github.com/collective/collective.redirectacquired>`_
