@@ -9,7 +9,9 @@ Changelog
   the previous monkey patches on older Zope/CMFCore.
   [mamico]
 
-- Add Plone 6.1 and 6.2 to the test matrix.
+- Add Plone 6.1 and 6.2 to the test matrix, using each release's own
+  bootstrap requirements from https://dist.plone.org/release/ (needed on
+  Python >= 3.12, where the pip/setuptools pinned for Plone 6.0 crash).
   [mamico]
 
 - Install ``coverage`` via pip in tox instead of through buildout: the

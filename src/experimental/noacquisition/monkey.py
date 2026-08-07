@@ -10,7 +10,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-""" Basic ZPublisher request management.
+"""Basic ZPublisher request management.
 
 + monkeypatch for break traversing without explicit acquisition
 
