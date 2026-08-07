@@ -14,10 +14,14 @@ Changelog
   ``@zpublish`` marker, which the previous docstring-only check did not.
   [mamico]
 
-- CI: comment out ``py27-plone52`` and ``py37-plone52`` (both still work
-  with tox locally): ``actions/setup-python`` can no longer install Python
-  2.7 or 3.7 on the ubuntu-24.04 runner image. Also set ``fail-fast: false``
-  so one broken leg stops hiding the others.
+- CI: add Plone 6.1 and 6.2 to the test matrix (py310-py313), bootstrapping
+  each from its own official ``https://dist.plone.org/release/<x>/requirements.txt``.
+  Comment out ``py27-plone52``, ``py37-plone52`` and ``py38-plone60`` (all
+  still work with tox locally): ``actions/setup-python`` can no longer
+  install Python 2.7/3.7 on the ubuntu-24.04 runner image, and Plone 6.0's
+  current constraints pin ``plone.recipe.zope2instance >= 8.0.0``, which
+  requires Python >= 3.9. Also set ``fail-fast: false`` so one broken leg
+  stops hiding the others.
   [mamico]
 
 - Replace the Bandit security check (broken: its Docker image is based on
