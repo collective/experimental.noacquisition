@@ -76,6 +76,31 @@ The behaviour described above constitute a problem because:
   ``collective.siteisolation`` and probably ``collective.lineage`` do something to isolate subsite, 
   but IMHO again are only workarounds.
 
+Versions
+========
+
+============ =================== ==============================================
+Series       Plone               Implementation
+============ =================== ==============================================
+``2.x``      6.0, 6.1, 6.2       ``Products.CMFCore.explicitacquisition``
+``1.x``      5.2, 6.0, 6.1, 6.2  monkey patch (**this branch**)
+============ =================== ==============================================
+
+This is the ``1.x`` series, maintained for Plone 5.2, 6.0, 6.1 and 6.2 (Zope
+< 6.2). Since ``Products.CMFCore`` 3.1 (i.e. Plone 6) Plone also ships a
+native implementation of this same idea, based on the ``IPubAfterTraversal``
+event instead of a monkey patch, and the ``2.x`` series of this package
+builds on that instead. That implementation only inspects the *last*
+traversed object, so it misses acquired content reached **through** a view
+that consumes further path segments -- for instance::
+
+    /folder/acquired_image/@@images/image          served by 2.x, 404 with 1.x
+    /folder/acquired_doc/@types/Document           served by 2.x, 404 with 1.x
+
+The monkey patch used here does not have that gap, because it checks at
+*every* traversal step. So ``1.x`` gives more complete coverage than
+``2.x`` on every Plone version both support.
+
 Usage
 =====
 
@@ -110,10 +135,14 @@ Don't use it, if you don't know exactly what are you doing... at least use leavi
 Other solutions
 ===============
 
-There is a more elegant solution in a branch of Products.CMFPlone, that makes use of IPubAfterTraversal event instead of a monkey patch. 
-But seems that currently it doesn't works for all cases, at least when there is a custom traversal at the end of the request (take a look at the tests inside this package).
-https://github.com/plone/Products.CMFPlone/tree/publication-through-explicit-acquisition
+The ``Products.CMFPlone`` branch that used to be linked here, based on the
+IPubAfterTraversal event instead of a monkey patch, was merged into
+``Products.CMFCore`` itself (3.1+) as
+``Products.CMFCore.explicitacquisition``, and is what the ``2.x`` series of
+this package builds on. It still doesn't work for all cases, at least when
+there is a custom traversal at the end of the request (take a look at the
+tests inside this package) -- see `Versions`_ above.
 
-There is also other packages with same approach as CMFPlone's branch:
+There is also other packages with the same event based approach:
 `collective.explicitacquisition <https://github.com/collective/collective.explicitacquisition>`_ and
 `collective.redirectacquired <https://github.com/collective/collective.redirectacquired>`_
