@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 
-version = '1.0.0b11.dev0'
+version = '1.1.0b0'
 
 setup(name='experimental.noacquisition',
       version=version,

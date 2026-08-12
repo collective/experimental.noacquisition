@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0.0b11 (unreleased)
----------------------
+1.1.0b0 (2026-08-12)
+--------------------
 
 - Support Plone 6.2 (Zope 6.1): raise the paranoid version check from
   ``Zope < 6`` to ``Zope < 6.2`` (verified that
