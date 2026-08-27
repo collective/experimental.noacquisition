@@ -4,7 +4,13 @@ Changelog
 1.1.0b1 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Support Zope 6.2 (Plone 6.2's current pin): raise the paranoid version
+  check from ``Zope < 6.2`` to ``Zope < 6.3`` (verified that
+  ``DefaultPublishTraverse.publishTraverse`` is unchanged between the Zope
+  6.1 and 6.2 tags). ``dist.plone.org``'s ``6.2-dev``/``6.2-latest``
+  constraints moved from Zope 6.1.x to Zope==6.2 after 1.1.0b0 was released,
+  which re-tripped the check.
+  [mamico]
 
 
 1.1.0b0 (2026-08-12)

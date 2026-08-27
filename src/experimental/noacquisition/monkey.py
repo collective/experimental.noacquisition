@@ -36,14 +36,14 @@ logger = logging.getLogger("experimental.noacquisition")
 # PARANOID VERSION CHECK: publishTraverse() below is a modified copy of
 # ZPublisher.BaseRequest.DefaultPublishTraverse.publishTraverse. Bail out
 # rather than risk silently diverging from upstream's behaviour on a Zope
-# version we haven't checked this copy against. Verified up to Zope 6.1
+# version we haven't checked this copy against. Verified up to Zope 6.2
 # (Plone 6.2): its publishTraverse is unchanged since at least Zope 5.13.
 _ZOPE_VERSION = pkg_resources.parse_version(
     pkg_resources.get_distribution("Zope").version
 )
-assert _ZOPE_VERSION < pkg_resources.parse_version("6.2"), (  # noqa: S101
+assert _ZOPE_VERSION < pkg_resources.parse_version("6.3"), (  # noqa: S101
     "experimental.noacquisition's monkey patch has only been verified up "
-    "to Zope 6.1 (Plone 6.2). Consider the 2.x series of this package "
+    "to Zope 6.2 (Plone 6.2). Consider the 2.x series of this package "
     "instead, which builds on Products.CMFCore.explicitacquisition rather "
     "than patching the publisher."
 )
