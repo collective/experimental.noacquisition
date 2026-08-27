@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.0b1 (unreleased)
+1.1.0b1 (2026-08-27)
 --------------------
 
 - Support Zope 6.2 (Plone 6.2's current pin): raise the paranoid version
